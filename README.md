@@ -51,3 +51,4 @@ spring.h2.console.enabled=true
 spring.data.jpa.repositories.bootstrap-mode=default
 spring.jpa.defer-datasource-initialization=true
 ```
+ - h2 console url: http://localhost:8080/h2-console
