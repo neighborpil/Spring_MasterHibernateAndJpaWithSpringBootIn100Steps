@@ -1,5 +1,6 @@
 # Spring_MasterHibernateAndJpaWithSpringBootIn100Steps
-Example codes hands on
+ - Example codes hands on
+ - https://github.com/in28minutes/jpa-with-hibernate
 
 
 # maven build option
