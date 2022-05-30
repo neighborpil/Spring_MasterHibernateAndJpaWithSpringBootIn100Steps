@@ -52,3 +52,14 @@ spring.data.jpa.repositories.bootstrap-mode=default
 spring.jpa.defer-datasource-initialization=true
 ```
  - h2 console url: http://localhost:8080/h2-console
+
+
+#### Tips
+ - To use hibernate, you should create a no args constructor.
+
+#### Tips
+ - show jpa sql code
+ - application.properties
+```
+spring.jpa.show-sql=true
+```
