@@ -39,3 +39,15 @@ management.endpoints.web.exposure.include=health,metrics
 		</dependency>
 
 ```
+
+
+## jpa and jdbc
+
+#### H2 datbase setting
+ - before starting the h2, you need to configure h2 database setting in application.properties
+```
+spring.datasource.url=jdbc:h2:mem:testdb;NON_KEYWORDS=USER
+spring.h2.console.enabled=true
+spring.data.jpa.repositories.bootstrap-mode=default
+spring.jpa.defer-datasource-initialization=true
+```
