@@ -57,8 +57,7 @@ spring.jpa.defer-datasource-initialization=true
 #### Tips
  - To use hibernate, you should create a no args constructor.
 
-#### Tips
- - show jpa sql code
+#### Tips : show jpa sql code
  - application.properties
 ```
 spring.jpa.show-sql=true
