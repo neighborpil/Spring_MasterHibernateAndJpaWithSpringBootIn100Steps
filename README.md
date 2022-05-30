@@ -1,5 +1,6 @@
 # Spring_MasterHibernateAndJpaWithSpringBootIn100Steps
-Example codes hands on
+ - Example codes hands on
+ - https://github.com/in28minutes/jpa-with-hibernate
 
 
 # maven build option
@@ -38,4 +39,27 @@ management.endpoints.web.exposure.include=health,metrics
       <scope>runtime</scope>
 		</dependency>
 
+```
+
+
+## jpa and jdbc
+
+#### H2 datbase setting
+ - before starting the h2, you need to configure h2 database setting in application.properties
+```
+spring.datasource.url=jdbc:h2:mem:testdb;NON_KEYWORDS=USER
+spring.h2.console.enabled=true
+spring.data.jpa.repositories.bootstrap-mode=default
+spring.jpa.defer-datasource-initialization=true
+```
+ - h2 console url: http://localhost:8080/h2-console
+
+
+#### Tips
+ - To use hibernate, you should create a no args constructor.
+
+#### Tips : show jpa sql code
+ - application.properties
+```
+spring.jpa.show-sql=true
 ```
