@@ -80,3 +80,8 @@ logging.level.org.hibernate.stat=trace
 #### Tips: @DirtiesContext
  - JUnit test annotation
  - spring will automatically reset the used data
+
+
+#### hibernate method
+ - EntityManager.detach() : DB와의 연결을 끊어버림
+ - EntityManager.clear() : 모든 entity의 DB와의 연결을 끊어버림
