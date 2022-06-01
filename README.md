@@ -76,3 +76,6 @@ logging.level.org.hibernate.stat=trace
 ### Junit4 and Junit5 annotation change
 ![image](https://user-images.githubusercontent.com/22423285/171105428-845981dc-4e21-436b-b134-e0128e7614be.png)
 
+### hibernate method
+ - EntityManager.detach() : DB와의 연결을 끊어버림
+ - EntityManager.clear() : 모든 entity의 DB와의 연결을 끊어버림
