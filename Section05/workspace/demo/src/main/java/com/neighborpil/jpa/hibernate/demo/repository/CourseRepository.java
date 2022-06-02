@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.neighborpil.jpa.hibernate.demo.entity.Course;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 @Transactional
 public class CourseRepository {
@@ -32,5 +35,32 @@ public class CourseRepository {
 	 public void deleteById(Long id) {
 		 Course course = findById(id);
 		 em.remove(course);
+	 }
+	 
+	 public void playWithEntityManager() {
+		 
+		 Course course1 = new Course("Web Services in 100 steps");
+		 em.persist(course1);
+		 
+		 Course course2 = findById(10002L);
+		 course2.setName("JPA in 50 steps - Updated");
+		 /*
+		 // Codes for detach and clear
+		 Course course1 = new Course("Web Services in 100 steps");
+		 em.persist(course1);
+		 Course course2 = new Course("Angular JS in 100 steps");
+		 em.persist(course2);
+		 em.flush(); // DB에 반영
+
+//		 em.detach(course1); // db와의 연결을 끊어버림
+//		 em.clear();
+
+		 course1.setName("Web Services in 100 steps - updated");
+		 course2.setName("Angular JS in 100 steps - updated");
+		 em.refresh(course1); // entity manager는 변경사항을 트래킹 하고 있는데 이때까지의 변경사항을 리프레시 함
+		 
+		 
+		 em.flush(); // DB에 반영
+		 */
 	 }
 }

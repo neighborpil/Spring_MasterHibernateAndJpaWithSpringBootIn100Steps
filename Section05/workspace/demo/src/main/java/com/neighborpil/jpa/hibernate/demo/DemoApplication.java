@@ -27,7 +27,8 @@ public class DemoApplication implements CommandLineRunner {
 		Course course = repository.findById(10001L);
 		log.info("Course details: {}", course);
 		
-//		repository.deleteById(10001L);
+		repository.deleteById(10001L);
 		repository.save(new Course("Microservices in 100 steps"));
+		repository.playWithEntityManager();
 	}
 }

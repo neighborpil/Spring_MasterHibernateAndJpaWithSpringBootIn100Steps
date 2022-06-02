@@ -49,5 +49,11 @@ class CourseRepositoryTest {
 		Course course1 = repository.findById(10001L);
 		assertEquals("JPA in 50 steps - Updated", course1.getName());
 	}
+	
+	@Test
+	@DirtiesContext
+	void playWithEntityManager() {
+		repository.playWithEntityManager();
+	}
 
 }
