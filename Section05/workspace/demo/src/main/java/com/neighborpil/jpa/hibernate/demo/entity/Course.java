@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -46,7 +45,7 @@ public class Course {
 //	@OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
 	private List<Review> reviews = new ArrayList<>();
 	
-	@ManyToMany
+	@ManyToMany(mappedBy = "courses")
 	private List<Student> students = new ArrayList<>();
 	
 	@UpdateTimestamp // hibernate function
@@ -74,7 +73,7 @@ public class Course {
 	public void removeStudent(Student student) {
 		this.students.remove(student);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Course [id=" + id + ", name=" + name + ", lastUpdatedDate=" + lastUpdatedDate + ", createdDate="
