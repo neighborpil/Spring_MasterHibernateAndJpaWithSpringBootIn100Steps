@@ -3,12 +3,16 @@ package com.neighborpil.jpa.hibernate.demo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.neighborpil.jpa.hibernate.demo.entity.Course;
+import com.neighborpil.jpa.hibernate.demo.entity.Review;
 import com.neighborpil.jpa.hibernate.demo.repository.CourseRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +23,9 @@ class CourseRepositoryTest {
 
 	@Autowired
 	CourseRepository repository;
+
+	@Autowired
+	EntityManager em;
 	
 	@Test
 	void findById_basic() {
@@ -56,4 +63,19 @@ class CourseRepositoryTest {
 		repository.playWithEntityManager();
 	}
 
+	@Test
+	@Transactional
+	void retrieveReviewsForCourse() {
+		Course course = repository.findById(10001L);
+		log.info("{}", course.getReviews());
+	}
+	
+	@Test
+	@Transactional
+	void retrieveCourseForReviews() {
+		Review review = em.find(Review.class, 50001L);
+		log.info("{}", review.getCourse());
+	}
+
+	
 }

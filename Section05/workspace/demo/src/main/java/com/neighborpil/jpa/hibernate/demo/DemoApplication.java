@@ -1,12 +1,16 @@
 package com.neighborpil.jpa.hibernate.demo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.neighborpil.jpa.hibernate.demo.entity.Course;
+import com.neighborpil.jpa.hibernate.demo.entity.Review;
 import com.neighborpil.jpa.hibernate.demo.repository.CourseRepository;
+import com.neighborpil.jpa.hibernate.demo.repository.StudentRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,8 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 public class DemoApplication implements CommandLineRunner {
 
 	@Autowired
-	private CourseRepository repository;
+	private CourseRepository courseRepository;
 	
+	@Autowired
+	private StudentRepository studentRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
@@ -24,11 +31,13 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Course course = repository.findById(10001L);
-		log.info("Course details: {}", course);
+		// studentRepository.saveStudentWithPassport();
+		// courseRepository.addHardcodedReviewsForCourse();
 		
-		repository.deleteById(10001L);
-		repository.save(new Course("Microservices in 100 steps"));
-		repository.playWithEntityManager();
+		List<Review> reviews = new ArrayList<>();
+		reviews.add(new Review("5", "Greate Hands-on Stuff."));
+		reviews.add(new Review("2", "Hands-on"));
+		courseRepository.addReviewsForCourse(10003L, reviews);
+	
 	}
 }
