@@ -155,3 +155,62 @@ public abstract class Employee {
  ...
 }
 ```
+
+## JPQL
+```
+TypedQuery<Course> createQuery = em.createQuery("Select c from Course c where c.students is empty", Course.class);
+List<Course> resultList = createQuery.getResultList();
+log.info("Results -> {}", resultList);
+```
+```
+TypedQuery<Course> createQuery = em.createQuery("Select c from Course c where size(c.students) >= 2", Course.class);
+TypedQuery<Course> createQuery = em.createQuery("Select c from Course c order by size(c.students) desc", Course.class);
+TypedQuery<Student> createQuery = em.createQuery("Select s from Student s where s.passport.number like '%1234%'", Student.class);
+
+
+```
+### Options
+LIKE
+BETWEEN 10 AND 1000
+IS NULL
+UPPPER, LOWER, TRIM, LENGTH
+
+JOIN -> Select c, s from Course c JOIN c.students s 
+LEFT JOIN -> Select c, s from Course c LEFT JOIN c.students s
+CROSS JOIN -> Select c, s from Course c, Student s // 3 and 4 => 3 * 4 = 12 Rows
+
+```
+@Test
+@Transactional
+public void join()  {
+	Query query = em.createQuery("Select c, s from Course c JOIN c.students s");
+	List<Object[]> resultList = query.getResultList();
+	log.info("Results -> {}", resultList.size());
+
+	for(Object[] result : resultList) {
+		log.info("Course: {}, Student: {}", result[0], result[1]);
+	}
+
+}
+```
+```
+Query query = em.createQuery("Select c, s from Course c LEFT JOIN c.students s");
+Query query = em.createQuery("Select c, s from Course c, Student s");
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
