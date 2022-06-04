@@ -209,6 +209,8 @@ Query query = em.createQuery("Select c, s from Course c, Student s");
  - a transaction gets differenct rows of data in a single transaction because of inserting rows from other transaction
 
 
+### Transaction types
+
 |                  | Dirty Read | Non Repeatable Read | Phanthom Read |
 |------------------|------------|---------------------|---------------|
 | Read Uncommitted | Possible   | Possible            | Possible      |
@@ -216,13 +218,27 @@ Query query = em.createQuery("Select c, s from Course c, Student s");
 | Repeatable Read  | Solved     | Solved              | Possible      |
 | Serializable     | Solved     | Solved              | Solved        |
 
+ - read committed : lock all the values during the transaction (most of the application accept this strategy)
+ - Repeatalbe Read : lock all the rows which I read
+ - Serializable : lock everything that is matched by this specific query condition on the table
 
+### setting default transaction level at application.properties
+```
+# transaction strategy(2: read committed)
+spring.jpa.properties.hibernate.connection.isolation=2 
+```
 
+### setting transaction level using annotation
+```
+//	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+//	@Transactional(isolation = Isolation.READ_UNCOMMITTED)
+//	@Transactional(isolation = Isolation.REPEATABLE_READ)
+//	@Transactional(isolation = Isolation.SERIALIZABLE)
+	void retrieveCourseForReviews() {
 
-
-
-
-
+	}
+```
 
 
 
