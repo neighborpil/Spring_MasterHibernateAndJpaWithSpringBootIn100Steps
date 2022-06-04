@@ -85,3 +85,73 @@ logging.level.org.hibernate.stat=trace
 #### hibernate method
  - EntityManager.detach() : DB와의 연결을 끊어버림
  - EntityManager.clear() : 모든 entity의 DB와의 연결을 끊어버림
+
+## Mapping
+
+### @OneToOne
+ - 1:1
+ - should select owing side
+ - not owing side should write "mappedBy"
+ - default fetch type is **eager**
+```
+@OneToOne(fetch = FetchType.LAZY, mappedBy="passport")
+```
+
+### @OneToMany
+ - **1** : n
+ - default fetch type is **lazy**
+```
+	@OneToMany(mappedBy = "course") // default fetchtype = lazy
+//	@OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+	private List<Review> reviews = new ArrayList<>();
+```
+
+### @ManyToOne
+ - 1 : **n**
+ - default fetch type is **eager**
+```
+	@ManyToOne // default: eager fetching
+	private Course course;
+```
+ 
+### @ManyToMany
+ - n : n
+ - default fetch type is **lazy**
+ - should write join column at owing side
+
+```
+	@ManyToMany // default: lazy fetch, I can change it to eager fetch
+	@JoinTable(name="STUDENT_COURSE", // owning side can add join table	 
+		joinColumns = @JoinColumn(name = "STUDENT_ID"),
+		inverseJoinColumns = @JoinColumn(name = "COURSE_ID"))
+	private List<Course> courses = new ArrayList<>()
+
+
+	
+	@ManyToMany(mappedBy = "courses")
+	private List<Student> students = new ArrayList<>()
+```
+
+### @Inheritance
+ - @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // default strategy: single_table
+   If I really **worried about performance**, then I would better **use SINGLE_TABLE** option.
+ - @DiscriminatorColumn(name="EmployeeType") // distinguish column, optional
+ - @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // table per concrete entity class, it repeats common columns like id, name
+ - @Inheritance(strategy = InheritanceType.JOINED) // create child tables and join them
+   If I really **concerned about data integrity**, then I would better **use JOINED option**.
+ - @MappedSuperclass // cannnot define as a @Entity, and it's not a entity, I should define retrieving subclasses separately, cannot define as Entity
+   Child classes doesn't have any connections among them
+
+```
+@Getter
+@Setter
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // default strategy: single_table
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // table per concrete entity class, it repeats common columns like id, name
+//@Inheritance(strategy = InheritanceType.JOINED) // 
+@MappedSuperclass // cannnot define as a @Entity, and it's not a entity, I should define retrieving subclasses separately
+//@Entity
+@DiscriminatorColumn(name="EmployeeType")
+public abstract class Employee {
+ ...
+}
+```
