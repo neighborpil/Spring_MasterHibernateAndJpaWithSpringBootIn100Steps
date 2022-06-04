@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.neighborpil.jpa.hibernate.demo.entity.Course;
 import com.neighborpil.jpa.hibernate.demo.entity.Passport;
 import com.neighborpil.jpa.hibernate.demo.entity.Student;
 
@@ -63,4 +64,27 @@ public class StudentRepository {
 			student.setName("Feel - updated");
 			// Persistence Context (student++, passport++)
 		}
+	 
+	 public void insertHardCodedStudentAndCourse() {
+		 Student student = new Student("Jack");
+		 Course course = new Course("Microservices in 100 steps");
+		 em.persist(student);
+		 em.persist(course);
+		 
+		 student.addCourse(course);
+		 course.addStudent(student);
+		 
+		 em.persist(student);
+	 }
+
+	 public void insertStudentAndCourse(Student student, Course course) {
+		 em.persist(student);
+		 em.persist(course);
+		 
+		 student.addCourse(course);
+		 course.addStudent(student);
+		 
+		 em.persist(student);
+	 }
+
 }

@@ -53,6 +53,11 @@ public class Student {
 		this.passport = passport;
 	}
 
+	public Student(String name) {
+		super();
+		this.name = name;
+	}
+
 
 
 }
