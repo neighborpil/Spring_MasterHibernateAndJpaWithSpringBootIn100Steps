@@ -37,7 +37,7 @@ public class Student {
 	@OneToOne(fetch = FetchType.LAZY)
 	private Passport passport;
 	
-	@ManyToMany
+	@ManyToMany // default: lazy fetch, I can change it to eager fetch
 	@JoinTable(name="STUDENT_COURSE", // owning side can add join table	 
 		joinColumns = @JoinColumn(name = "STUDENT_ID"),
 		inverseJoinColumns = @JoinColumn(name = "COURSE_ID"))

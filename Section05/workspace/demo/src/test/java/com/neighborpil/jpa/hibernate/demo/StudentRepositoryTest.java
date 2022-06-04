@@ -47,4 +47,14 @@ class StudentRepositoryTest {
 		log.info("passport -> {}", passport);
 		log.info("student -> {}", passport.getStudent());
 	}	
+
+	@Test
+	@Transactional
+	@DirtiesContext
+	void retrieveStudentAndCourses() {
+		Student student = em.find(Student.class, 20001L); // lazy fetch
+		log.info("student -> {}", student);
+		log.info("student.getCourses() -> {}", student.getCourses());
+	}	
+
 }
