@@ -198,11 +198,23 @@ Query query = em.createQuery("Select c, s from Course c LEFT JOIN c.students s")
 Query query = em.createQuery("Select c, s from Course c, Student s");
 ```
 
+## Transaction
+
+### Concepts
+1. Dirty read
+ - try to read modified data from transaction 2 when transaction 1 doesn't finished
+2. Non Repeatable read
+ - a transaction tries to retrieve the same data twice and it gets two different values duing the same transactions
+3. Phanthom read
+ - a transaction gets differenct rows of data in a single transaction because of inserting rows from other transaction
 
 
-
-
-
+|                  | Dirty Read | Non Repeatable Read | Phanthom Read |
+|------------------|------------|---------------------|---------------|
+| Read Uncommitted | Possible   | Possible            | Possible      |
+| Read Committed   | Solved     | Possible            | Possible      |
+| Repeatable Read  | Solved     | Solved              | Possible      |
+| Serializable     | Solved     | Solved              | Solved        |
 
 
 
