@@ -170,14 +170,14 @@ TypedQuery<Student> createQuery = em.createQuery("Select s from Student s where 
 
 ```
 ### Options
-LIKE
-BETWEEN 10 AND 1000
-IS NULL
-UPPPER, LOWER, TRIM, LENGTH
+ - LIKE
+ - BETWEEN 10 AND 1000
+ - IS NULL
+ - UPPPER, LOWER, TRIM, LENGTH
 
-JOIN -> Select c, s from Course c JOIN c.students s 
-LEFT JOIN -> Select c, s from Course c LEFT JOIN c.students s
-CROSS JOIN -> Select c, s from Course c, Student s // 3 and 4 => 3 * 4 = 12 Rows
+ - JOIN -> Select c, s from Course c JOIN c.students s 
+ - LEFT JOIN -> Select c, s from Course c LEFT JOIN c.students s
+ - CROSS JOIN -> Select c, s from Course c, Student s // 3 and 4 => 3 * 4 = 12 Rows
 
 ```
 @Test
