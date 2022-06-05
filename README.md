@@ -389,9 +389,86 @@ class CriteriaQueryTest {
 }
 ```
 
+### Spring Data JPA Repository
+ - JpaRepository<T, id>
+ 
+```
+package com.neighborpil.jpa.hibernate.demo.repository;
 
+import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import com.neighborpil.jpa.hibernate.demo.entity.Course;
+
+public interface CourseSpringDataRepository extends JpaRepository<Course, Long>{
+
+	List<Course> findByName(String name);
+
+	List<Course> findByNameAndId(String name, Long id);
+	
+	List<Course> findByNameOrderByIdDesc(String name);
+
+	List<Course> deleteByName(String name);
+	
+	@Query("SELECT c FROM Course c WHERE name LIKE '%100 steps'")
+	List<Course> courseWith100StepsInName();
+
+	@Query(value="SELECT * FROM Course c WHERE name LIKE '%100 steps'", nativeQuery=true)
+	List<Course> courseWith100StepsInNameUsingNativeQuery();
+
+	@Query(name="query_get_100_courses")
+	List<Course> courseWith100StepsInNameUsingNamedQuery();
+}
+
+```
+ - If I want to connect to rest api directly, I should add another dependency
+```
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-rest</artifactId>
+</dependency>
+```
+ - If recursive relation matters, I should add JsonIgnre annotation
+```
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@JsonIgnore
+@ManyToMany(mappedBy = "courses")
+private List<Student> students = new ArrayList<>();
+```
+
+## Caching
+
+### First Level Transaction
+ - boundary of caching is single transaction
+ - Ideal place of transaction is service layer
+```
+	@Test
+	@Transactional
+	void findById_firstLevelCacheDemo() {
+		Course course = repository.findById(10001L);
+		log.info("First Course Retrieved: {}", course);
+		Course course1 = repository.findById(10001L); // first level caching occurred. It was done because of same boundary of transaction
+		log.info("First Course Retrieved again: {}", course1);
+		
+		assertEquals("JPA in 50 steps", course.getName());
+		assertEquals("JPA in 50 steps", course1.getName());
+	}
+```
+
+### Second Level Transaction
+ - boundary is accross multiple transactions
+ - I should define which data will be cached to use second level cache
+ - need to add dependency
+```
+<dependency>
+	<groupId>org.hibernate</groupId>
+	<artifactId>hibernate-ehcache</artifactId>
+</dependency>
+```
 
 
 
