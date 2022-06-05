@@ -492,7 +492,26 @@ public class Course {
 }
 ```
 
-
+### soft delete
+ - hibernate function
+ - add delete column
+ - add @SQLDelete annotation
+ - add @Where caluse
+```
+@SQLDelete(sql="update course set is_deleted = true where id=?") // hibernate fuction
+@Where(clause="is_deleted = false")
+public class Course {
+	private boolean isDeleted;
+}
+```
+ - add preRemove hook
+```
+@PreRemove
+private void preRemove() {
+	log.info("Setting isDeleted to True");
+	this.isDeleted = true;
+}
+```
 
 
 
