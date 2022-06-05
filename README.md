@@ -469,7 +469,28 @@ private List<Student> students = new ArrayList<>();
 	<artifactId>hibernate-ehcache</artifactId>
 </dependency>
 ```
+ - application.properties
+```
 
+# Second Level Cache - EhCache
+# 1. enable second level cache
+spring.jpa.properties.hibernate.cache.use_second_level_cache=true
+# 2. specify the caching framework - EhCache
+spring.jpa.properties.hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.EhCacheRegionFactory
+# 3. Only cache what I tell to cache
+spring.jpa.properties.javax.persistence.sharedCache.mode=ENABLE_SELECTIVE
+# for debugging
+logging.level.net.sf.ehcache=debug
+# 4. What data to cache?
+```
+
+ - Set classes that I want to cache as cacheable
+```
+@Cacheable
+public class Course {
+	...
+}
+```
 
 
 
