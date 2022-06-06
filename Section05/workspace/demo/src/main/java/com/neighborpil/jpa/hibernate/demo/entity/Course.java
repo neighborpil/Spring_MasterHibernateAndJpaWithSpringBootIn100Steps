@@ -36,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Table(name="course") // hibernate function
 @NamedQueries(value = {
 	@NamedQuery(name="query_get_all_courses", query="SELECT c FROM Course c"),
+	@NamedQuery(name="query_get_all_courses_join_fetch", query="SELECT c FROM Course c JOIN FETCH c.students s"),
 	@NamedQuery(name="query_get_100_courses", query="SELECT c FROM Course c WHERE name LIKE '%100 steps'")
 })
 @Getter

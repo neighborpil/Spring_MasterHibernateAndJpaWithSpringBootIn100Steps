@@ -39,6 +39,7 @@ public class CourseRepository {
 	 public void deleteById(Long id) {
 		 Course course = findById(id);
 		 em.remove(course);
+		 log.info("Course -> {}", course);
 	 }
 	 
 	 public void playWithEntityManager() {
