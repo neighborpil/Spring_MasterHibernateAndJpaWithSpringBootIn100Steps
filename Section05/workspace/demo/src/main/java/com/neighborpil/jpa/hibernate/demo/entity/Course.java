@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,16 +13,23 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +40,9 @@ import lombok.Setter;
 })
 @Getter
 @Setter
+@Cacheable
+@SQLDelete(sql="update course set is_deleted = true where id=?") // hibernate fuction
+@Where(clause="is_deleted = false")
 public class Course {
 
 	@Id
@@ -45,6 +56,7 @@ public class Course {
 //	@OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
 	private List<Review> reviews = new ArrayList<>();
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "courses")
 	private List<Student> students = new ArrayList<>();
 	
@@ -54,6 +66,14 @@ public class Course {
 	@CreationTimestamp // hibernate function
 	private LocalDateTime createdDate;
 
+	private boolean isDeleted;
+	
+	@PreRemove
+	private void preRemove() {
+		log.info("Setting isDeleted to True");
+		this.isDeleted = true;
+	}
+	
 	public Course(String name) {
 		this.name = name;
 	}

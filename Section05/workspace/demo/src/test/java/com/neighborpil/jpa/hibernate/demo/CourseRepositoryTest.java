@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.neighborpil.jpa.hibernate.demo.entity.Course;
@@ -32,6 +33,18 @@ class CourseRepositoryTest {
 		Course course = repository.findById(10001L);
 		
 		assertEquals("JPA in 50 steps", course.getName());
+	}
+		
+	@Test
+	@Transactional
+	void findById_firstLevelCacheDemo() {
+		Course course = repository.findById(10001L);
+		log.info("First Course Retrieved: {}", course);
+		Course course1 = repository.findById(10001L); // first level caching occurred. It was done because of same boundary of transaction
+		log.info("First Course Retrieved again: {}", course1);
+		
+		assertEquals("JPA in 50 steps", course.getName());
+		assertEquals("JPA in 50 steps", course1.getName());
 	}
 	
 	@Test
@@ -71,8 +84,24 @@ class CourseRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
+//	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+//	@Transactional(isolation = Isolation.READ_UNCOMMITTED)
+//	@Transactional(isolation = Isolation.REPEATABLE_READ)
+//	@Transactional(isolation = Isolation.SERIALIZABLE)
 	void retrieveCourseForReviews() {
+		
+		// scenario that uses multiple databases
+		// At that scenario I should use springframework transaction
+		// database 1
+		  // update 1
+		  // update 2
+		
+		// database 2
+		
+		// mq
+		
+		
 		Review review = em.find(Review.class, 50001L);
 		log.info("{}", review.getCourse());
 	}

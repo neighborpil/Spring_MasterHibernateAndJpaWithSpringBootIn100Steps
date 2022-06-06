@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.neighborpil.jpa.hibernate.demo.entity.Address;
 import com.neighborpil.jpa.hibernate.demo.entity.Passport;
 import com.neighborpil.jpa.hibernate.demo.entity.Student;
 import com.neighborpil.jpa.hibernate.demo.repository.StudentRepository;
@@ -56,5 +57,16 @@ class StudentRepositoryTest {
 		log.info("student -> {}", student);
 		log.info("student.getCourses() -> {}", student.getCourses());
 	}	
+
+	@Test
+	@Transactional
+	@DirtiesContext
+	void setAddressDetails() {
+		Student student = em.find(Student.class, 20001L);
+		student.setAddress(new Address("No 101", "Some Street", "Busan"));		
+		em.flush();
+		log.info("student -> {}", student);
+	}	
+
 
 }
