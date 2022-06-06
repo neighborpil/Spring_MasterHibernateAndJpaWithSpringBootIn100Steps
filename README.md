@@ -670,4 +670,23 @@ class PerformanceTuningTest {
 
 ```
 
+## Tips
 
+### How to connect to other database types like mysql, oracle?
+ - add dependency
+```
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+ - configure application.properties
+```
+spring.jpa.hibernate.ddl-auto=none
+spring.datasource.url=jdbc:mysql://localhost:3306/person_example
+spring.datasource.username=personuser
+spring.datasource.password=YOUR_PASSWORD
+```
+
+
+       ,m.
