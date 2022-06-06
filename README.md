@@ -513,10 +513,180 @@ private void preRemove() {
 }
 ```
 
+### Embedded class
+ - set @Embedable
+ - set @Embeded
+
+ - Address.class
+```
+package com.neighborpil.jpa.hibernate.demo.entity;
+
+import javax.persistence.Embeddable;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+public class Address {
+	
+	private String line1;
+	private String line2;
+	private String city;
+}
 
 
+```
+
+ - Student.class
+```
+package com.neighborpil.jpa.hibernate.demo.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class Student {
+
+	@Embedded
+	private Address address;
+
+}
+```
+
+ - StudentRepositoryTest.class
+```
+	@Test
+	@Transactional
+	@DirtiesContext
+	void setAddressDetails() {
+		Student student = em.find(Student.class, 20001L);
+		student.setAddress(new Address("No 101", "Some Street", "Busan"));		
+		em.flush();
+		log.info("student -> {}", student);
+	}	
+```
 
 
+#### Distinguish Eager and Lazy fetch
+ - *ToOne(@ManyToOne, @OneToOne) are eagered by default.
+
+## Performance Tuning
+
+### N+1 performance problem solution
+ - N:N에서 lazy fetch가 기본이기 때문에 만약 join이 필요한 경우는 1:N, N:N, N:1순으로 3번의 join이 일어난다
+ - 때문에 기본은 lazy fetch이더라도 N:N이 필요한 경우에는 eager fetch로 해야 한다
+```
+package com.neighborpil.jpa.hibernate.demo;
+
+import java.util.List;
+
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.Subgraph;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.neighborpil.jpa.hibernate.demo.entity.Course;
+import com.neighborpil.jpa.hibernate.demo.repository.CourseRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@SpringBootTest(classes=DemoApplication.class)
+class PerformanceTuningTest {
+
+	@Autowired
+	CourseRepository repository;
+
+	@Autowired
+	EntityManager em;
+	
+	@Test
+	@Transactional // N+1 문제 케이스 students에서 문제 
+	void creatingNPlusOneProblem() {
+		List<Course> courses = em.createNamedQuery("query_get_all_courses", Course.class).getResultList();
+		
+		for(Course course : courses) { 
+			log.info("Course -> {} Students -> {}", course, course.getStudents());
+		}
+			
+	}
+		
+	@Test
+	@Transactional
+	void solvingNPlusOneProblem_EntityGraph() { // hint를 이용한 n+1 문제 해결 방법
+		EntityGraph<Course> entityGraph = em.createEntityGraph(Course.class); // default는 lazy fetch이지만 loadgraph를 설정하여 eager fetch로 바꿀 수 있다
+		Subgraph<Object> subgraph = entityGraph.addSubgraph("students");
+		
+		List<Course> courses = em.createNamedQuery("query_get_all_courses", Course.class)
+				.setHint("javax.persistence.loadgraph", entityGraph)
+				.getResultList();
+		
+		for(Course course : courses) { 
+			log.info("Course -> {} Students -> {}", course, course.getStudents());
+		}
+			
+	}
+
+	@Test
+	@Transactional
+	void solvingNPlusOneProblem_JOinFetch() { // named query의 join을 이용한 n+1 문제 해결 방법
+		List<Course> courses = em.createNamedQuery("query_get_all_courses_join_fetch", Course.class).getResultList();
+		
+		for(Course course : courses) { 
+			log.info("Course -> {} Students -> {}", course, course.getStudents());
+		}
+			
+	}
+}
 
 
+```
 
+## Tips
+
+### How to connect to other database types like mysql, oracle?
+ - add dependency
+```
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+ - configure application.properties
+```
+spring.jpa.hibernate.ddl-auto=none
+spring.datasource.url=jdbc:mysql://localhost:3306/person_example
+spring.datasource.username=personuser
+spring.datasource.password=YOUR_PASSWORD
+```
+
+
+       ,m.
