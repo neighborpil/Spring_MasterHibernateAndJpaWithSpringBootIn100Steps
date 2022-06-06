@@ -513,6 +513,82 @@ private void preRemove() {
 }
 ```
 
+### Embedded class
+ - set @Embedable
+ - set @Embeded
+
+ - Address.class
+```
+package com.neighborpil.jpa.hibernate.demo.entity;
+
+import javax.persistence.Embeddable;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+public class Address {
+	
+	private String line1;
+	private String line2;
+	private String city;
+}
+
+
+```
+
+ - Student.class
+```
+package com.neighborpil.jpa.hibernate.demo.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class Student {
+
+	@Embedded
+	private Address address;
+
+}
+```
+
+ - StudentRepositoryTest.class
+```
+	@Test
+	@Transactional
+	@DirtiesContext
+	void setAddressDetails() {
+		Student student = em.find(Student.class, 20001L);
+		student.setAddress(new Address("No 101", "Some Street", "Busan"));		
+		em.flush();
+		log.info("student -> {}", student);
+	}	
+```
 
 
 
