@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.neighborpil.learnspringframework.game.GameRunner;
+import com.neighborpil.dummy.GameRunner;
 
 @SpringBootApplication
-@ComponentScan("com.neighborpil.learnspringframework")
+@ComponentScan({"com.neighborpil.learnspringframework", "com.neighborpil.dummy"})
 public class LearnSpringFrameworkApplication {
 
 	/**

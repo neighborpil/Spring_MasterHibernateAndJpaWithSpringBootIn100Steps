@@ -1,7 +1,9 @@
-package com.neighborpil.learnspringframework.game;
+package com.neighborpil.dummy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.neighborpil.learnspringframework.game.GamingConsole;
 
 @Component
 public class GameRunner {

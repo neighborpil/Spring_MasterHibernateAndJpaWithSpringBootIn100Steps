@@ -4,12 +4,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Component
-//@Primary
-public class SuperControlGame implements GamingConsole{
+@Primary
+public class PacManGame implements GamingConsole{
 
 	@Override
 	public void up() {
-		System.out.println("SuperControlGame up");
+		System.out.println("PacManGame up");
 	}
 
 	@Override
